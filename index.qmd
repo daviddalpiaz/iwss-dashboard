@@ -1,0 +1,127 @@
+---
+title: "Illinois Wastewater Surveillance System"
+author: "Urbana-Champaign Sanitary District Northeast Sewage Treatment Plant"
+format: dashboard
+---
+
+```{python}
+import pandas as pd
+from datetime import datetime
+from matplotlib import pyplot as plt
+import matplotlib.font_manager as fm
+from itables import show
+from statsmodels.nonparametric.smoothers_lowess import lowess
+
+url = "https://iwss.uillinois.edu/wastewater-treatment-plant/download/159/"
+data = pd.read_csv(url)
+
+data = data[data["method"] != 0]
+
+# Filter rows where sars_cov_2 is greater than 3000000
+filtered_data = data[data["sars_cov_2"] > 3000000]
+
+# Print the filtered rows
+# print(filtered_data)
+
+data = data[data["sars_cov_2"] <= 3000000]
+
+def plot_data(data):
+    # Ensure sample_collect_date is in datetime format
+    data["sample_collect_date"] = pd.to_datetime(data["sample_collect_date"])
+
+    # Sort data by date
+    data = data.sort_values("sample_collect_date")
+
+    # Create figure and axes objects with a specific size (width, height)
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    # Create scatter plot with smaller, "dodgerblue" points
+    ax.scatter(data["sample_collect_date"], data["sars_cov_2"], color="dodgerblue", s=10)
+
+    # Apply lowess smoother
+    smoothed = lowess(data["sars_cov_2"], data["sample_collect_date"].map(datetime.toordinal), frac=0.1)
+
+    # Convert smoothed x values back to datetime
+    smoothed_dates = [datetime.fromordinal(int(x)) for x in smoothed[:, 0]]
+
+    # Plot the smoother line in dark orange
+    ax.plot(smoothed_dates, smoothed[:, 1], "darkorange")
+
+    # Set the font properties for the x and y labels
+    ax.set_xlabel("sample collection date")
+    ax.set_ylabel("gene copies per liter (gc/L)")
+
+    # Disable scientific notation
+    ax.get_yaxis().get_major_formatter().set_scientific(False)
+
+    # Generate major ticks at the start of every other month
+    major_ticks = pd.date_range(
+        start=min(data["sample_collect_date"]), end=max(data["sample_collect_date"]), freq="2MS"
+    )
+
+    # Generate minor ticks at the start of every month
+    minor_ticks = pd.date_range(
+        start=min(data["sample_collect_date"]), end=max(data["sample_collect_date"]), freq="MS"
+    )
+
+    # Set the x-ticks positions
+    ax.set_xticks(major_ticks)
+    ax.set_xticks(minor_ticks, minor=True)
+
+    # Add a light grey, dashed grid
+    ax.grid(color="lightgrey", linestyle="--", linewidth=0.5)
+
+    # Rotate x-axis labels
+    plt.xticks(rotation=45, ha="right")
+
+    plt.tight_layout()
+
+    # return fig
+```
+
+## Row
+
+```{python}
+#| content: valuebox
+#| title: "Articles per day"
+#| icon: pencil
+#| color: primary
+dict(
+  value = 45
+)
+```
+
+```{python}
+#| content: valuebox
+#| title: "Comments per day"
+dict(
+  icon = "chat",
+  color = "primary",
+  value = 126
+)
+```
+
+```{python}
+#| content: valuebox
+#| title: "Spam per day"
+dict(
+  icon = "trash",
+  color = "danger",
+  value = 50
+)
+```
+
+## Row
+
+```{python}
+#| title: ZZZ
+show(data, searching=False, info=False)
+```
+
+## Row
+
+```{python}
+#| title: ZZZ
+
+plot_data(data)
+```
