@@ -1,8 +1,6 @@
 import pandas as pd
 from datetime import datetime
 from matplotlib import pyplot as plt
-import matplotlib.font_manager as fm
-from IPython.display import Markdown
 from statsmodels.nonparametric.smoothers_lowess import lowess
 
 

@@ -6,10 +6,7 @@ format: dashboard
 
 ```{python}
 import pandas as pd
-from datetime import datetime
-from matplotlib import pyplot as plt
 from IPython.display import Markdown
-from statsmodels.nonparametric.smoothers_lowess import lowess
 from helpers import process_data, plot_data
 ```
 
