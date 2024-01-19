@@ -1,0 +1,5 @@
+/.quarto/
+**/__pycache__/
+/docs/
+/_freeze/
+*/libs/
