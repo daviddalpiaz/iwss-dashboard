@@ -34,5 +34,4 @@ jobs:
       - name: Render and publish to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2
         with:
-          path: ${{ github.workspace }} 
           target: gh-pages
