@@ -1,6 +1,0 @@
-ipython
-jupyter
-matplotlib
-pandas
-statsmodels
-tabulate
