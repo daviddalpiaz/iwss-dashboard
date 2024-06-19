@@ -1,6 +1,7 @@
 ipython
 jupyter
 matplotlib
+numpy==1.24.4
 pandas
 statsmodels
 tabulate
