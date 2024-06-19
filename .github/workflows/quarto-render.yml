@@ -22,8 +22,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          version: 1.4.545
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
